@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 @UtilityClass
 public class FileUtil {
@@ -25,15 +26,26 @@ public class FileUtil {
             throw new IllegalRequestDataException("Select a file to upload.");
         }
 
-        File dir = new File(directoryPath);
-        if (dir.exists() || dir.mkdirs()) {
-            File file = new File(directoryPath + fileName);
-            try (OutputStream outStream = new FileOutputStream(file)) {
-                outStream.write(multipartFile.getBytes());
-            } catch (IOException ex) {
-                throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
+//        File dir = new File(directoryPath);
+//        if (dir.exists() || dir.mkdirs()) {
+//            File file = new File(directoryPath + fileName);
+//            try (OutputStream outStream = new FileOutputStream(file)) {
+//                outStream.write(multipartFile.getBytes());
+//            } catch (IOException ex) {
+//                throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
+//            }
+//        }
+        Path dir=Paths.get(directoryPath);
+        try {
+            if(Files.notExists(dir)) {
+                Files.createDirectories(dir);
             }
+            Path file=dir.resolve(fileName);
+            Files.write(file, multipartFile.getBytes(),StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
         }
+
     }
 
     public static Resource download(String fileLink) {
