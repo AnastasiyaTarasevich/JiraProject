@@ -1,4 +1,4 @@
-package com.javarush.jira.config;
+package com.javarush.jira.common.internal.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;

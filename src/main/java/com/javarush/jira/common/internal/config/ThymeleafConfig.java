@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 import java.util.Set;
 
@@ -25,7 +27,18 @@ public class ThymeleafConfig {
         FileTemplateResolver mailResolver = createTemplateResolver("./resources/mails/");
         mailResolver.setOrder(2);
         engine.setTemplateResolvers(Set.of(viewResolver, mailResolver));
+        engine.setEnableSpringELCompiler(true);
+        engine.setMessageSource(messageSource());
+        engine.setTemplateEngineMessageSource(messageSource());
         return engine;
+    }
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setFallbackToSystemLocale(false);
+        return messageSource;
     }
 
     private FileTemplateResolver createTemplateResolver(String pfx) {

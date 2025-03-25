@@ -9,15 +9,20 @@ import com.javarush.jira.profile.internal.model.Profile;
 import java.util.Collections;
 import java.util.Set;
 
+import static com.javarush.jira.login.internal.web.UserTestData.USER_ID;
+
 public class ProfileTestData {
     public static MatcherFactory.Matcher<Profile> PROFILE_MATCHER =
-            MatcherFactory.usingIgnoringFieldsComparator(Profile.class, "user");
+            MatcherFactory.usingIgnoringFieldsComparator(Profile.class,"user");
+    public static MatcherFactory.Matcher<ProfileTo> PROFILE_TO_MATCHER =
+            MatcherFactory.usingIgnoringFieldsComparator(ProfileTo.class);
 
     public static ProfileTo USER_PROFILE_TO = new ProfileTo(null,
             Set.of("assigned", "overdue", "deadline"),
             Set.of(new ContactTo("skype", "userSkype"),
                     new ContactTo("mobile", "+01234567890"),
                     new ContactTo("website", "user.com")));
+
     public static ProfileTo GUEST_PROFILE_EMPTY_TO = new ProfileTo(null,
             Set.of(),
             Set.of());
